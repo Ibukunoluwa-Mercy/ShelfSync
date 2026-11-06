@@ -1,0 +1,154 @@
+{% extends "base_public.html" %}
+{% block title %}ShelfSync | Smarter Inventory. Stronger Business.{% endblock %}
+{% block public_navbar %}
+<nav class="navbar navbar-expand-lg homepage-navbar sticky-top" id="site-nav">
+  <div class="container">
+    <a class="navbar-brand" href="#home" aria-label="ShelfSync home">
+      <img src="{{ url_for('static', filename='images/ShelfSync Sync Logo.png') }}" alt="ShelfSync logo" class="homepage-logo">
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#homepageNav" aria-controls="homepageNav" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="homepageNav">
+      <div class="navbar-nav mx-auto">
+        <a class="nav-link active" href="#home">Home</a>
+        <a class="nav-link" href="#about">About</a>
+        <a class="nav-link" href="#features">Features</a>
+        <a class="nav-link" href="#contact">Contact</a>
+      </div>
+      <div class="homepage-nav-actions d-flex gap-2">
+        <!-- Switch to url_for('login') and url_for('register') when those routes exist. -->
+        <a class="btn btn-outline-primary btn-sm" href="/login">Log In</a>
+        <a class="btn btn-primary btn-sm" href="/register">Get Started</a>
+      </div>
+    </div>
+  </div>
+</nav>
+{% endblock %}
+{% block content %}
+<div class="page-home">
+  <section class="home-hero" id="home">
+    <div class="container">
+      <div class="row align-items-center g-4">
+        <div class="col-lg-6 reveal">
+          <p class="eyebrow">SMART INVENTORY, SIMPLIFIED</p>
+          <h1>Smarter Inventory.<br>Stronger Business.</h1>
+          <p class="hero-copy">Track, manage, and grow your store with ShelfSync — the all-in-one inventory management solution.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary btn-lg" href="/register">Get Started Free <i class="fa-solid fa-arrow-right ms-2"></i></a>
+            <a class="btn btn-outline-primary btn-lg" href="#features">Learn More</a>
+          </div>
+        </div>
+        <div class="col-lg-6 reveal">
+          <div class="hero-art">
+            <div class="hero-blob"></div>
+            <span class="sparkle sparkle-one"></span><span class="sparkle sparkle-two"></span><span class="sparkle sparkle-three"></span>
+            <img src="{{ url_for('static', filename='images/landing-page woman image.jpeg') }}" alt="Shop owner smiling while using a tablet in a store aisle" class="hero-image">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="container reveal">
+    <div class="feature-strip">
+      <div class="strip-item"><i class="fa-solid fa-chart-simple"></i><div><strong>Real-Time Tracking</strong><span>Keep track of your stock instantly.</span></div></div>
+      <div class="strip-item"><i class="fa-solid fa-bell amber-icon"></i><div><strong>Low-Stock Alerts</strong><span>Never run out of essentials.</span></div></div>
+      <div class="strip-item"><i class="fa-solid fa-arrow-trend-up"></i><div><strong>Insightful Reports</strong><span>Make informed decisions.</span></div></div>
+    </div>
+  </section>
+
+  <section class="home-section about-section" id="about">
+    <div class="container">
+      <div class="row align-items-center g-4">
+        <div class="col-lg-4 reveal">
+          <h2>Ditch the Notebook.<br>Stop Losing Money.</h2>
+          <p>Say goodbye to manual record-keeping and inventory headaches. With ShelfSync, you get automation, accuracy, and peace of mind.</p>
+          <a class="btn btn-primary" href="#features">Explore Features <i class="fa-solid fa-arrow-right ms-2"></i></a>
+        </div>
+        <div class="col-lg-3 reveal">
+          <img src="{{ url_for('static', filename='images/book_notebook.png') }}" alt="Notebook showing a handwritten stock list" class="img-fluid about-image" loading="lazy">
+        </div>
+        <div class="col-lg-1 reveal"><div class="transfer-arrow"><i class="fa-solid fa-arrow-right"></i></div></div>
+        <div class="col-lg-4 reveal">
+          <div class="solution-card">
+            <div class="solution-tab">ShelfSync</div>
+            <div class="solution-content">
+              <ul class="check-list">
+                <li><i class="fa-solid fa-circle-check"></i> Automated tracking</li>
+                <li><i class="fa-solid fa-circle-check"></i> Low-stock alerts</li>
+                <li><i class="fa-solid fa-circle-check"></i> Accurate records</li>
+              </ul>
+              <img src="{{ url_for('static', filename='images/laptop.png') }}" alt="ShelfSync dashboard on a laptop" class="img-fluid laptop-image" loading="lazy">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="home-section features-section" id="features">
+    <div class="container">
+      <h2 class="text-center reveal">Everything You Need to Run Your Shop Effortlessly</h2>
+      <div class="row g-3 mt-3">
+        {% set features = [
+          ('fa-cube', 'Live Stock Movements', 'Automatic update on stock-in & stock-out.'),
+          ('fa-bell', 'Low-Stock Threshold Alerts', 'Get notified when stock is low.'),
+          ('fa-shield-halved', 'Role-Based Access', 'Separate admin and staff permissions.'),
+          ('fa-chart-simple', 'Sales & Profit Analytics', 'Track performance with easy reports.')
+        ] %}
+        {% for icon, title, description in features %}
+        <div class="col-12 col-md-6 col-xl-3 reveal">
+          <article class="feature-card"><i class="fa-solid {{ icon }}"></i><h3>{{ title }}</h3><p>{{ description }}</p></article>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section class="home-section info-section">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-lg-6 reveal">
+          <h2>Up and Running in<br>Under 5 Minutes</h2>
+          <ol class="steps-list">
+            <li><span>1</span><div><strong>Add Products</strong> – Input items, prices, and low-stock limits.</div></li>
+            <li><span>2</span><div><strong>Record Sales</strong> – Log sales at the counter with automatic deductions.</div></li>
+            <li><span>3</span><div><strong>Track &amp; Grow</strong> – Monitor dashboards and prevent stockouts.</div></li>
+          </ol>
+        </div>
+        <div class="col-lg-6 reveal">
+          <h2>Tailored for Local<br>Retail Success</h2>
+          <ul class="check-list audience-list">
+            <li><i class="fa-solid fa-circle-check"></i><span><strong>Supermarkets &amp; Grocery Shops</strong><small>Rice, Oils, Canned Goods</small></span></li>
+            <li><i class="fa-solid fa-circle-check"></i><strong>Pharmacies &amp; Beauty Supply Stores</strong></li>
+            <li><i class="fa-solid fa-circle-check"></i><strong>Boutiques &amp; Convenience Stores</strong></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="container reveal" id="contact">
+    <div class="cta-banner">
+      <div class="cta-icon"><i class="fa-solid fa-rocket"></i></div>
+      <div class="cta-copy"><h2>Ready to Streamline Your Store?</h2><p>Create your free account today and take the first step towards a smarter business.</p></div>
+      <a class="btn cta-button" href="/register">Create Your Free Account Today <i class="fa-solid fa-arrow-right ms-2"></i></a>
+    </div>
+  </section>
+</div>
+{% endblock %}
+{% block public_footer %}
+<footer class="homepage-footer">
+  <div class="container">
+    <div class="footer-main">
+      <a href="#home" aria-label="ShelfSync home"><img src="{{ url_for('static', filename='images/ShelfSync Sync Logo.png') }}" alt="ShelfSync logo" class="footer-logo"></a>
+      <div class="footer-links"><a href="#features">System Features</a><a href="/login">Login</a><a href="#">Documentation</a><a href="#">Support</a></div>
+      <div class="trust-badges"><span><i class="fa-solid fa-shield-halved"></i> 99.9% Uptime</span><span><i class="fa-solid fa-lock"></i> 100% Data Security</span><span><i class="fa-solid fa-bolt"></i> Instant Setup</span></div>
+    </div>
+    <div class="footer-bottom">&copy; <span id="current-year"></span> ShelfSync &bull; Inventory Management System</div>
+  </div>
+</footer>
+{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">{% endblock %}
+{% block extra_js %}<script src="{{ url_for('static', filename='js/homepage.js') }}"></script>{% endblock %}
