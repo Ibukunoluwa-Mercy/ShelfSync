@@ -24,7 +24,7 @@
 .hero-actions .btn { border-radius: 999px; }
 .hero-art { min-height: 300px; position: relative; }
 .hero-blob { background: var(--green-tint-strong); border-radius: 48% 52% 38% 62%; height: 90%; position: absolute; right: 0; top: 6%; transform: rotate(-8deg); width: 88%; }
-.hero-image { border-radius: 45% 45% 18% 18%; display: block; height: 320px; margin-left: auto; object-fit: cover; object-position: center; position: relative; width: 82%; z-index: 1; }
+.hero-image { display: block; height: 320px; margin-left: auto; object-fit: contain; object-position: bottom center; position: relative; width: 82%; z-index: 1; }
 .sparkle { background: var(--amber); display: block; height: 5px; position: absolute; transform: rotate(45deg); width: 25px; z-index: 2; }
 .sparkle-one { left: 12%; top: 11%; }.sparkle-two { left: 18%; top: 2%; transform: rotate(75deg); }.sparkle-three { left: 7%; top: 22%; transform: rotate(15deg); }
 
