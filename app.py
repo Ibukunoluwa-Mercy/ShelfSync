@@ -1,5 +1,4 @@
 import os
-import sqlite3
 from functools import wraps
 
 from flask import Flask, flash, redirect, render_template, session, url_for
@@ -13,6 +12,8 @@ app.config["SECRET_KEY"] = os.environ.get(
     "dev-only-change-this-secret-key",
 )  # Set SECRET_KEY in production.
 app.teardown_appcontext(close_db)
+with app.app_context():
+    init_db()
 
 
 @app.template_filter("naira")
@@ -69,6 +70,4 @@ def layout_test():
 
 
 if __name__ == "__main__":
-    with app.app_context():
-        init_db()
     app.run(debug=True)
