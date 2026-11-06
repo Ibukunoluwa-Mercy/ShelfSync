@@ -1,5 +1,5 @@
 /* ===== Page shell ===== */
-.page-home { background: var(--white); overflow: hidden; }
+.page-home { background: var(--white); overflow-x: hidden; }
 .page-home h1, .page-home h2, .page-home h3 { color: var(--green); font-weight: 800; }
 .page-home h2 { font-size: clamp(1.55rem, 3vw, 2rem); }
 .page-home p { line-height: 1.5; }
@@ -39,6 +39,7 @@
 .home-section { padding: 3rem 0; }
 .about-section { background: var(--white); }
 .about-image { max-height: 250px; object-fit: contain; width: 100%; }
+.book { background: var(--green-tint); border-radius: 18px; overflow: hidden; }
 .transfer-arrow { align-items: center; background: var(--green); border-radius: 50%; color: var(--white); display: flex; height: 42px; justify-content: center; margin: auto; width: 42px; }
 .solution-card { background: var(--green-tint); border-radius: 18px; overflow: hidden; }
 .solution-tab { background: var(--green); color: var(--white); font-weight: 700; padding: .55rem 1rem; text-align: center; }
