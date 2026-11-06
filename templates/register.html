@@ -1,0 +1,72 @@
+{% extends "base_public.html" %}
+{% block title %}Create Account | ShelfSync{% endblock %}
+{% block body_class %}page-register{% endblock %}
+{% block navbar %}{% endblock %}
+{% block footer %}{% endblock %}
+{% block flash_messages %}{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">{% endblock %}
+{% block content %}
+<main class="register-page">
+  <section class="register-card" aria-labelledby="register-title">
+    <div class="register-image">
+      <img src="{{ url_for('static', filename='images/create-account image.png') }}"
+           alt="ShelfSync shopping bag in a supermarket aisle">
+    </div>
+    <div class="register-panel">
+      <a class="register-logo" href="{{ url_for('homepage') }}" aria-label="ShelfSync home">
+        <img src="{{ url_for('static', filename='images/ShelfSync Sync Logo.png') }}" alt="ShelfSync logo">
+      </a>
+      <h1 id="register-title">Create Account</h1>
+      <p class="register-intro">Join ShelfSync and take control<br>of your inventory</p>
+      {% include "partials/_flash.html" %}
+      <form method="post" id="register-form" novalidate>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="register-field">
+          <label for="full_name" class="visually-hidden">Full Name</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-regular fa-user"></i></span>
+            <input id="full_name" name="full_name" class="form-control{% if errors.full_name %} is-invalid{% endif %}"
+                   placeholder="Full Name" value="{{ form_values.full_name }}" autocomplete="name" required>
+          </div>
+          {% if errors.full_name %}<div class="invalid-feedback d-block">{{ errors.full_name }}</div>{% endif %}
+        </div>
+        <div class="register-field">
+          <label for="email" class="visually-hidden">Email Address</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-regular fa-envelope"></i></span>
+            <input id="email" type="email" name="email" class="form-control{% if errors.email %} is-invalid{% endif %}"
+                   placeholder="Email Address" value="{{ form_values.email }}" autocomplete="email" required>
+          </div>
+          {% if errors.email %}<div class="invalid-feedback d-block">{{ errors.email }}</div>{% endif %}
+        </div>
+        <div class="register-field">
+          <label for="password" class="visually-hidden">Password</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
+            <input id="password" type="password" name="password" class="form-control{% if errors.password %} is-invalid{% endif %}"
+                   placeholder="Password" autocomplete="new-password" required>
+            <button type="button" class="password-toggle" data-target="password" aria-label="Show password"><i class="fa-regular fa-eye"></i></button>
+          </div>
+          {% if errors.password %}<div class="invalid-feedback d-block">{{ errors.password }}</div>{% endif %}
+          <div class="strength-wrap" aria-live="polite"><div class="strength-bar"><span id="strength-progress"></span></div><span id="strength-label"></span></div>
+          <small class="password-hint">At least 8 characters, with a letter and a number.</small>
+        </div>
+        <div class="register-field">
+          <label for="confirm_password" class="visually-hidden">Confirm Password</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
+            <input id="confirm_password" type="password" name="confirm_password" class="form-control{% if errors.confirm_password %} is-invalid{% endif %}"
+                   placeholder="Confirm Password" autocomplete="new-password" required>
+            <button type="button" class="password-toggle" data-target="confirm_password" aria-label="Show password"><i class="fa-regular fa-eye"></i></button>
+          </div>
+          {% if errors.confirm_password %}<div class="invalid-feedback d-block">{{ errors.confirm_password }}</div>{% endif %}
+          <div id="match-hint" class="match-hint" aria-live="polite"></div>
+        </div>
+        <button type="submit" class="register-submit" id="register-submit">Create Account</button>
+      </form>
+      <p class="signin-prompt">Already have an account? <a href="{{ url_for('login') }}">Sign In</a></p>
+    </div>
+  </section>
+</main>
+{% endblock %}
+{% block extra_js %}<script src="{{ url_for('static', filename='js/register.js') }}"></script>{% endblock %}

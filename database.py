@@ -26,16 +26,28 @@ def close_db(error=None):
 def init_db():
     """Create the application tables and initial category data."""
     db = get_db()
+    user_columns = {
+        row["name"] for row in db.execute("PRAGMA table_info(users)").fetchall()
+    }
+    if "username" in user_columns:
+        user_count = db.execute("SELECT COUNT(*) FROM users").fetchone()[0]
+        if user_count:
+            raise RuntimeError(
+                "The existing users table still uses username columns and contains "
+                "data. Back it up and migrate it before starting ShelfSync."
+            )
+        db.execute("DROP TABLE users")
+        db.commit()
+
     db.executescript(
         """
         CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            full_name TEXT NOT NULL,
-            username TEXT NOT NULL UNIQUE,
-            email TEXT NOT NULL,
+            id            INTEGER PRIMARY KEY AUTOINCREMENT,
+            full_name     TEXT NOT NULL,
+            email         TEXT NOT NULL UNIQUE COLLATE NOCASE,
             password_hash TEXT NOT NULL,
-            role TEXT NOT NULL DEFAULT 'staff' CHECK (role IN ('admin', 'staff')),
-            created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+            role          TEXT NOT NULL DEFAULT 'staff' CHECK (role IN ('admin', 'staff')),
+            created_at    TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
         );
 
         CREATE TABLE IF NOT EXISTS categories (
