@@ -7,6 +7,8 @@
   --danger: #b3402a;
   --border: #e5e0c8;
   --green-dark: #1f4d39;
+  --green-tint: rgba(45, 106, 79, 0.10);
+  --green-tint-strong: rgba(45, 106, 79, 0.16);
   --bs-primary: #2D6A4F;
   --bs-primary-rgb: 45, 106, 79;
   --bs-warning: #D4A373;

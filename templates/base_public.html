@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   {% block extra_css %}{% endblock %}
 </head>
-<body>
+<body class="{% block body_class %}{% endblock %}">
   {% block public_navbar %}{% include "partials/_navbar_public.html" %}{% endblock %}
   {% include "partials/_flash.html" %}
   <main>{% block content %}{% endblock %}</main>
