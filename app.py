@@ -8,7 +8,7 @@ from functools import wraps
 from flask import Flask, flash, redirect, render_template, request, session, url_for
 from werkzeug.security import generate_password_hash
 
-from database import close_db, init_db
+from database import close_db, get_db, init_db
 
 
 app = Flask(__name__)
