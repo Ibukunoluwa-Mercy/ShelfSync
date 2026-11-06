@@ -1,0 +1,136 @@
+/* ===== About Section ===== */
+.home-section {
+  padding: 3rem 0;
+}
+
+.about-section {
+  background: var(--white);
+}
+
+.about-image {
+  max-height: 250px;
+  object-fit: contain;
+  width: 100%;
+}
+
+.book {
+  background: var(--green-tint);
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.transfer-arrow {
+  align-items: center;
+  background: var(--green);
+  border-radius: 50%;
+  color: var(--white);
+  display: flex;
+  height: 42px;
+  justify-content: center;
+  margin: auto;
+  width: 42px;
+}
+
+.solution-card {
+  background: var(--green-tint);
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.solution-tab {
+  background: var(--green);
+  color: var(--white);
+  font-weight: 700;
+  padding: 0.55rem 1rem;
+  text-align: center;
+}
+
+.solution-content {
+  padding: 1rem;
+}
+
+.check-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.check-list li {
+  align-items: center;
+  display: flex;
+  gap: 0.55rem;
+  margin-bottom: 0.6rem;
+}
+
+.check-list i {
+  color: #16a34a;
+}
+
+.laptop-image {
+  display: block;
+  max-height: 180px;
+  object-fit: contain;
+  width: 100%;
+}
+
+/* ===== Features Section ===== */
+.features-section {
+  background: var(--white);
+}
+
+.feature-card {
+  background: var(--green-tint);
+  border-radius: 18px;
+  height: 100%;
+  padding: 1.4rem 1rem;
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feature-card:hover {
+  box-shadow: 0 10px 24px rgba(31, 77, 57, 0.1);
+  transform: translateY(-5px);
+}
+
+.feature-card > i {
+  color: var(--green);
+  font-size: 1.7rem;
+  margin-bottom: 0.8rem;
+}
+
+.feature-card h3 {
+  font-size: 1rem;
+}
+
+.feature-card p {
+  font-size: 0.78rem;
+  margin: 0;
+}
+
+.continuation-features {
+  padding-bottom: 2rem;
+}
+
+.continuation-features > .container > h2 {
+  font-size: clamp(1.3rem, 2.4vw, 1.75rem);
+}
+
+.continuation-features .feature-card {
+  min-height: 112px;
+  padding: 1rem 0.75rem;
+}
+
+.continuation-features .feature-card > i {
+  font-size: 1.35rem;
+  margin-bottom: 0.45rem;
+}
+
+.continuation-features .feature-card h3 {
+  font-size: 0.78rem;
+  margin-bottom: 0.25rem;
+}
+
+.continuation-features .feature-card p {
+  font-size: 0.65rem;
+  line-height: 1.25;
+}
