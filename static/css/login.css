@@ -28,6 +28,7 @@ body.page-login > main, .page-login .login-page {
   overflow: hidden;
   position: relative;
   width: 100%;
+  max-width: 250px;
 }
 .page-login .login-image img {
   display: block;
