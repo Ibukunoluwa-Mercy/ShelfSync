@@ -2,26 +2,39 @@ import os
 import re
 import secrets
 import sqlite3
+from datetime import timedelta
 from logging import getLogger
-from functools import wraps
 
 from flask import Flask, flash, redirect, render_template, request, session, url_for
 from werkzeug.security import generate_password_hash
 
+from auth_service import admin_required, handle_login, login_required
 from database import close_db, get_db, init_db
-
 
 app = Flask(__name__)
 logger = getLogger(__name__)
+
+# Security & session configuration
 app.config["SECRET_KEY"] = os.environ.get(
     "SECRET_KEY",
     "dev-only-change-this-secret-key",
-)  # Set SECRET_KEY in production.
+)
 app.config["SESSION_COOKIE_HTTPONLY"] = True
 app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
+app.permanent_session_lifetime = timedelta(hours=8)
+
 app.teardown_appcontext(close_db)
 with app.app_context():
     init_db()
+
+
+@app.after_request
+def set_cache_control(response):
+    """Keep private pages private by setting no-store when logged in."""
+    if session.get("user_id"):
+        response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+        response.headers["Pragma"] = "no-cache"
+    return response
 
 
 @app.template_filter("naira")
@@ -54,36 +67,10 @@ def validate_csrf_token():
     if request.method == "POST":
         submitted_token = request.form.get("csrf_token", "")
         session_token = session.get("csrf_token", "")
-        if not session_token or not secrets.compare_digest(
-            submitted_token, session_token
-        ):
+        if not session_token or not secrets.compare_digest(submitted_token, session_token):
             flash("Your session expired. Please try again.", "warning")
             return redirect(request.referrer or url_for("homepage"))
     return None
-
-
-def login_required(view):
-    """Require a signed-in user before allowing access to a view."""
-    @wraps(view)
-    def wrapped_view(*args, **kwargs):
-        if "user_id" not in session:
-            flash("Please log in to continue.", "warning")
-            return redirect(url_for("layout_test"))
-        return view(*args, **kwargs)
-
-    return wrapped_view
-
-
-def admin_required(view):
-    """Require a signed-in administrator before allowing access to a view."""
-    @wraps(view)
-    def wrapped_view(*args, **kwargs):
-        if session.get("role") != "admin":
-            flash("Administrator access is required.", "danger")
-            return redirect(url_for("layout_test"))
-        return view(*args, **kwargs)
-
-    return wrapped_view
 
 
 @app.errorhandler(404)
@@ -96,12 +83,25 @@ def homepage():
     return render_template("homepage.html")
 
 
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    """Sign in an existing user with rate limiting and timing-attack protection."""
+    return handle_login(logger)
+
+
+@app.route("/logout", methods=["POST"])
+def logout():
+    """Sign out the current user and invalidate the session."""
+    session.clear()
+    flash("You have been signed out.", "info")
+    return redirect(url_for("login"))
+
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     """Create a staff account, or the first admin account for the shop."""
     if session.get("user_id"):
-        # Point this redirect at the dashboard once that route exists.
-        return redirect(url_for("homepage"))
+        return redirect(url_for("dashboard"))
 
     form_values = {"full_name": "", "email": ""}
     errors = {}
@@ -119,26 +119,17 @@ def register():
 
         if not email:
             errors["email"] = "Please enter your email address."
-        elif (
-            len(email) > 254
-            or not re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]+", email)
-        ):
+        elif len(email) > 254 or not re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]+", email):
             errors["email"] = "Please enter a valid email address."
-        elif get_db().execute(
-            "SELECT 1 FROM users WHERE email = ? COLLATE NOCASE", (email,)
-        ).fetchone():
-            errors["email"] = (
-                "An account with this email already exists. Try signing in."
-            )
+        elif get_db().execute("SELECT 1 FROM users WHERE email = ? COLLATE NOCASE", (email,)).fetchone():
+            errors["email"] = "An account with this email already exists. Try signing in."
 
         if not password:
             errors["password"] = "Please enter a password."
         elif not 8 <= len(password) <= 128:
             errors["password"] = "Password must be between 8 and 128 characters."
         elif not re.search(r"[A-Za-z]", password) or not re.search(r"\d", password):
-            errors["password"] = (
-                "Password must include at least one letter and one number."
-            )
+            errors["password"] = "Password must include at least one letter and one number."
         elif password.lower() == email.lower():
             errors["password"] = "Password cannot be the same as your email."
 
@@ -146,9 +137,7 @@ def register():
             errors["confirm_password"] = "Passwords do not match."
 
         if errors:
-            return render_template(
-                "register.html", form_values=form_values, errors=errors
-            ), 400
+            return render_template("register.html", form_values=form_values, errors=errors), 400
 
         db = get_db()
         try:
@@ -156,34 +145,22 @@ def register():
             user_count = db.execute("SELECT COUNT(*) FROM users").fetchone()[0]
             role = "admin" if user_count == 0 else "staff"
             db.execute(
-                """
-                INSERT INTO users (full_name, email, password_hash, role)
-                VALUES (?, ?, ?, ?)
-                """,
+                "INSERT INTO users (full_name, email, password_hash, role) VALUES (?, ?, ?, ?)",
                 (full_name, email, generate_password_hash(password), role),
             )
             db.commit()
         except sqlite3.IntegrityError:
             db.rollback()
-            errors["email"] = (
-                "An account with this email already exists. Try signing in."
-            )
-            return render_template(
-                "register.html", form_values=form_values, errors=errors
-            ), 400
+            errors["email"] = "An account with this email already exists. Try signing in."
+            return render_template("register.html", form_values=form_values, errors=errors), 400
         except sqlite3.Error:
             db.rollback()
             logger.exception("Could not create an account")
             flash("Something went wrong. Please try again.", "danger")
-            return render_template(
-                "register.html", form_values=form_values, errors={}
-            ), 500
+            return render_template("register.html", form_values=form_values, errors={}), 500
 
         if role == "admin":
-            flash(
-                "Welcome! Your admin account has been created. Please sign in.",
-                "success",
-            )
+            flash("Welcome! Your admin account has been created. Please sign in.", "success")
         else:
             flash("Account created successfully. Please sign in.", "success")
         return redirect(url_for("login"))
@@ -191,20 +168,25 @@ def register():
     return render_template("register.html", form_values=form_values, errors=errors)
 
 
-@app.route("/login")
-def login():
-    # TEMPORARY: replaced when the Login page is built.
-    return "Login page coming soon."
+# TEMPORARY: replaced when the page is built
+@app.route("/dashboard")
+@login_required
+def dashboard():
+    """Temporary dashboard placeholder for confirming authenticated access."""
+    return render_template("dashboard.html")
+
+
+# TEMPORARY: replaced when the page is built
+@app.route("/forgot-password")
+def forgot_password():
+    """Temporary forgot password recovery placeholder."""
+    return render_template("forgot_password.html")
 
 
 @app.route("/_layout-test")
 def layout_test():
     """Temporary visual test route; remove when real pages are added."""
-    return render_template(
-        "base_app.html",
-        page_title="Layout Test",
-        demo_page=True,
-    )
+    return render_template("base_app.html", page_title="Layout Test", demo_page=True)
 
 
 if __name__ == "__main__":

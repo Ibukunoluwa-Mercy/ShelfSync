@@ -1,0 +1,117 @@
+{% extends "base_public.html" %}
+
+{% block title %}Sign In | ShelfSync{% endblock %}
+{% block body_class %}page-login{% endblock %}
+{% block navbar %}{% endblock %}   {# focused card page, no public navbar #}
+{% block footer %}{% endblock %}   {# and no footer #}
+{% block flash_messages %}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+{% endblock %}
+
+{% block content %}
+<main class="login-page">
+  <section class="login-card" aria-labelledby="login-title">
+    <!-- Left panel: side photo -->
+    <div class="login-image">
+      <img src="{{ url_for('static', filename='images/login image.png') }}"
+           alt="Shopping cart with packages in supermarket aisle">
+    </div>
+
+    <!-- Right panel: form -->
+    <div class="login-panel">
+      <!-- ShelfSync logo -->
+      <a class="login-logo" href="{{ url_for('homepage') }}" aria-label="ShelfSync home">
+        <img src="{{ url_for('static', filename='images/ShelfSync Sync Logo.png') }}"
+             alt="ShelfSync logo" class="img-fluid">
+      </a>
+
+      <!-- Page heading and subtitle -->
+      <h1 id="login-title">Welcome Back!</h1>
+      <p class="login-intro">Sign in to your account to continue</p>
+
+      <!-- Shared flash alert messages (e.g., successful registration or lockout warnings) -->
+      {% include "partials/_flash.html" %}
+
+      <!-- Credential or server-side error banner -->
+      {% if errors.general %}
+        <div class="alert alert-danger" role="alert">
+          {{ errors.general }}
+        </div>
+      {% endif %}
+
+      <!-- Sign In Form -->
+      <form method="post" action="{{ url_for('login', next=next_url) if next_url else url_for('login') }}" id="login-form" novalidate>
+        <!-- CSRF Token protection -->
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        {% if next_url %}
+          <input type="hidden" name="next" value="{{ next_url }}">
+        {% endif %}
+
+        <!-- Email Field -->
+        <div class="login-field">
+          <label for="email" class="visually-hidden">Email Address</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-regular fa-envelope"></i></span>
+            <input id="email" type="email" name="email"
+                   class="form-control{% if errors.email %} is-invalid{% endif %}"
+                   placeholder="Email Address"
+                   value="{{ form_values.email }}"
+                   autocomplete="email"
+                   maxlength="254"
+                   required>
+          </div>
+          {% if errors.email %}
+            <div class="invalid-feedback d-block">{{ errors.email }}</div>
+          {% endif %}
+        </div>
+
+        <!-- Password Field with Show/Hide Toggle -->
+        <div class="login-field">
+          <label for="password" class="visually-hidden">Password</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
+            <input id="password" type="password" name="password"
+                   class="form-control{% if errors.password %} is-invalid{% endif %}"
+                   placeholder="Password"
+                   autocomplete="current-password"
+                   maxlength="128"
+                   required>
+            <button type="button" class="password-toggle" id="password-toggle"
+                    aria-label="Show password" tabindex="0">
+              <i class="fa-regular fa-eye"></i>
+            </button>
+          </div>
+          {% if errors.password %}
+            <div class="invalid-feedback d-block">{{ errors.password }}</div>
+          {% endif %}
+          <div id="caps-lock-warning" class="caps-lock-warning d-none" role="alert">
+            <i class="fa-solid fa-triangle-exclamation me-1"></i> Caps Lock is on
+          </div>
+        </div>
+
+        <!-- Forgot Password Link -->
+        <div class="forgot-password-wrap">
+          <a href="{{ url_for('forgot_password') }}" class="forgot-password-link">Forgot Password?</a>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="login-submit" id="login-submit">
+          Sign In
+        </button>
+      </form>
+
+      <!-- Account registration prompt -->
+      <p class="signup-prompt">
+        Don't have an account? <a href="{{ url_for('register') }}">Create Account</a>
+      </p>
+    </div>
+  </section>
+</main>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/login.js') }}"></script>
+{% endblock %}
+

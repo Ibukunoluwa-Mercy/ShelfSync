@@ -39,6 +39,10 @@ def init_db():
         db.execute("DROP TABLE users")
         db.commit()
 
+    # Add last_login_at column to users table if it does not exist yet.
+    if "last_login_at" not in user_columns:
+        db.execute("ALTER TABLE users ADD COLUMN last_login_at TEXT")
+
     db.executescript(
         """
         CREATE TABLE IF NOT EXISTS users (
@@ -47,8 +51,20 @@ def init_db():
             email         TEXT NOT NULL UNIQUE COLLATE NOCASE,
             password_hash TEXT NOT NULL,
             role          TEXT NOT NULL DEFAULT 'staff' CHECK (role IN ('admin', 'staff')),
-            created_at    TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+            created_at    TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            last_login_at TEXT
         );
+
+        CREATE TABLE IF NOT EXISTS login_attempts (
+            id           INTEGER PRIMARY KEY AUTOINCREMENT,
+            email        TEXT NOT NULL,
+            ip_address   TEXT NOT NULL,
+            success      INTEGER NOT NULL DEFAULT 0,
+            attempted_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+        );
+
+        CREATE INDEX IF NOT EXISTS idx_login_attempts_lookup
+            ON login_attempts (email, ip_address, attempted_at);
 
         CREATE TABLE IF NOT EXISTS categories (
             id INTEGER PRIMARY KEY AUTOINCREMENT,

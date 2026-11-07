@@ -1,0 +1,118 @@
+/* ===== Page Scope ===== */
+.page-login { background-color: var(--offwhite); color: var(--text); min-height: 100vh; }
+.page-login .login-page { align-items: center; display: flex; justify-content: center; min-height: 100vh; padding: 24px 16px; }
+
+/* ===== Card Container ===== */
+.page-login .login-card {
+  background-color: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  box-shadow: 0 12px 36px rgba(31, 77, 57, 0.12);
+  display: grid;
+  grid-template-columns: 1fr;
+  max-width: 960px;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+/* ===== Photo Panel (Left) ===== */
+.page-login .login-image {
+  background: var(--green-tint);
+  height: 200px;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+.page-login .login-image img { display: block; height: 100%; object-fit: cover; object-position: center; width: 100%; }
+
+/* ===== Form Panel (Right) ===== */
+.page-login .login-panel { background-color: var(--white); padding: 36px 28px; position: relative; text-align: center; z-index: 2; }
+.page-login .login-logo { display: inline-block; margin-bottom: 0.75rem; }
+.page-login .login-logo img { height: 52px; max-width: 200px; object-fit: contain; }
+.page-login h1 { color: var(--green); font-size: 1.85rem; font-weight: 800; letter-spacing: -0.02em; margin: 0 0 0.35rem; }
+.page-login .login-intro { color: var(--text); font-size: 0.95rem; font-weight: 500; margin-bottom: 1.5rem; }
+
+/* ===== Inputs & Input Groups ===== */
+.page-login .login-field { margin-bottom: 16px; text-align: left; }
+.page-login .input-group {
+  border: 1px solid #d4dad6;
+  border-radius: 999px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  min-height: 52px;
+  overflow: hidden;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.page-login .input-group:focus-within { border-color: var(--green); box-shadow: 0 0 0 0.22rem rgba(45, 106, 79, 0.2); }
+.page-login .input-group-text {
+  background-color: var(--white);
+  border: 0;
+  color: #3b5045;
+  font-size: 1.1rem;
+  padding-left: 1.25rem;
+  padding-right: 0.5rem;
+}
+.page-login .form-control { background-color: var(--white); border: 0; color: var(--text); font-size: 0.95rem; height: auto; padding: 0.75rem 0.5rem; }
+.page-login .form-control:focus { border: 0; box-shadow: none; }
+.page-login .form-control::placeholder { color: #8c9892; font-weight: 400; }
+.page-login .password-toggle {
+  background: transparent;
+  border: 0;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0 1.25rem 0 0.5rem;
+  transition: color 0.15s ease;
+}
+.page-login .password-toggle:hover { color: var(--green); }
+.page-login .invalid-feedback { color: var(--danger); font-size: 0.8rem; margin-top: 4px; padding-left: 1rem; }
+.page-login .caps-lock-warning { color: #925827; font-size: 0.8rem; font-weight: 600; margin-top: 4px; padding-left: 1rem; }
+
+/* ===== Actions & Links ===== */
+.page-login .forgot-password-wrap { margin: -4px 0 18px; text-align: right; }
+.page-login .forgot-password-link { color: var(--green); font-size: 0.88rem; font-weight: 700; text-decoration: underline; transition: color 0.15s ease; }
+.page-login .forgot-password-link:hover { color: var(--green-dark); }
+.page-login .login-submit {
+  align-items: center;
+  background-color: var(--green);
+  border: 0;
+  border-radius: 999px;
+  color: var(--white);
+  cursor: pointer;
+  display: flex;
+  font-size: 1.05rem;
+  font-weight: 700;
+  justify-content: center;
+  min-height: 52px;
+  padding: 0.75rem 1.5rem;
+  transition: background-color 0.2s ease, transform 0.15s ease;
+  width: 100%;
+}
+.page-login .login-submit:hover:not(:disabled) { background-color: var(--green-dark); }
+.page-login .login-submit:disabled { cursor: not-allowed; opacity: 0.85; }
+.page-login .signup-prompt { color: #4b5563; font-size: 0.92rem; margin: 1.5rem 0 0; }
+.page-login .signup-prompt a { color: var(--green); font-weight: 700; text-decoration: none; }
+.page-login .signup-prompt a:hover { color: var(--green-dark); text-decoration: underline; }
+
+/* ===== Desktop Split Layout with Curved Edge ===== */
+@media (min-width: 768px) {
+  .page-login .login-card { grid-template-columns: 42% 58%; min-height: 560px; }
+  .page-login .login-image { height: 100%; }
+  .page-login .login-panel {
+    border-bottom-left-radius: 40px;
+    border-top-left-radius: 40px;
+    box-shadow: -10px 0 24px rgba(0, 0, 0, 0.05);
+    margin-left: -32px;
+    padding: 48px 56px;
+  }
+}
+
+@media (min-width: 992px) {
+  .page-login .login-panel { padding: 56px 68px; }
+}
+
+/* ===== Motion Preference ===== */
+@media (prefers-reduced-motion: reduce) {
+  .page-login .input-group,
+  .page-login .login-submit,
+  .page-login .password-toggle { transition: none; }
+}

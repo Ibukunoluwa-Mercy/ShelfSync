@@ -1,0 +1,23 @@
+{% extends "base_app.html" %}
+
+{% block title %}Dashboard | {{ shop_name }}{% endblock %}
+
+{% block content %}
+<section class="section-title mb-4">
+  <h2>Dashboard</h2>
+</section>
+
+<div class="card mb-4">
+  <div class="card-body">
+    <h3 class="h5 mb-2">Dashboard coming soon</h3>
+    <p class="text-muted mb-3">
+      Welcome back, <strong>{{ session.get('full_name', 'User') }}</strong>! Your current assigned role is
+      <span class="badge bg-success text-capitalize">{{ session.get('role', 'staff') }}</span>.
+    </p>
+    <p class="small text-muted mb-0">
+      You are successfully signed in to ShelfSync. This temporary view will be updated with your full dashboard statistics and graphs.
+    </p>
+  </div>
+</div>
+{% endblock %}
+
