@@ -10,6 +10,11 @@ from werkzeug.security import generate_password_hash
 
 from auth_service import admin_required, handle_login, login_required
 from database import close_db, get_db, init_db
+from env_loader import load_env_file
+from password_reset_service import handle_forgot_password, handle_reset_password
+
+# Load local environment configuration from .env if present
+load_env_file()
 
 app = Flask(__name__)
 logger = getLogger(__name__)
@@ -97,6 +102,18 @@ def logout():
     return redirect(url_for("login"))
 
 
+@app.route("/forgot-password", methods=["GET", "POST"])
+def forgot_password():
+    """Request a secure password reset link via email."""
+    return handle_forgot_password(logger)
+
+
+@app.route("/reset-password/<token>", methods=["GET", "POST"])
+def reset_password(token):
+    """Verify reset token and update account password."""
+    return handle_reset_password(token, logger)
+
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     """Create a staff account, or the first admin account for the shop."""
@@ -174,13 +191,6 @@ def register():
 def dashboard():
     """Temporary dashboard placeholder for confirming authenticated access."""
     return render_template("dashboard.html")
-
-
-# TEMPORARY: replaced when the page is built
-@app.route("/forgot-password")
-def forgot_password():
-    """Temporary forgot password recovery placeholder."""
-    return render_template("forgot_password.html")
 
 
 @app.route("/_layout-test")

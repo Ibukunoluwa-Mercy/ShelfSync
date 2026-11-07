@@ -24,7 +24,7 @@ def close_db(error=None):
 
 
 def init_db():
-    """Create the application tables and initial category data."""
+    """Create the application tables, safe column migrations, and seed data."""
     db = get_db()
     user_columns = {
         row["name"] for row in db.execute("PRAGMA table_info(users)").fetchall()
@@ -39,20 +39,23 @@ def init_db():
         db.execute("DROP TABLE users")
         db.commit()
 
-    # Add last_login_at column to users table if it does not exist yet.
+    # Safely migrate users table columns without modifying existing rows
     if "last_login_at" not in user_columns:
         db.execute("ALTER TABLE users ADD COLUMN last_login_at TEXT")
+    if "session_version" not in user_columns:
+        db.execute("ALTER TABLE users ADD COLUMN session_version INTEGER NOT NULL DEFAULT 0")
 
     db.executescript(
         """
         CREATE TABLE IF NOT EXISTS users (
-            id            INTEGER PRIMARY KEY AUTOINCREMENT,
-            full_name     TEXT NOT NULL,
-            email         TEXT NOT NULL UNIQUE COLLATE NOCASE,
-            password_hash TEXT NOT NULL,
-            role          TEXT NOT NULL DEFAULT 'staff' CHECK (role IN ('admin', 'staff')),
-            created_at    TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            last_login_at TEXT
+            id              INTEGER PRIMARY KEY AUTOINCREMENT,
+            full_name       TEXT NOT NULL,
+            email           TEXT NOT NULL UNIQUE COLLATE NOCASE,
+            password_hash   TEXT NOT NULL,
+            role            TEXT NOT NULL DEFAULT 'staff' CHECK (role IN ('admin', 'staff')),
+            created_at      TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            last_login_at   TEXT,
+            session_version INTEGER NOT NULL DEFAULT 0
         );
 
         CREATE TABLE IF NOT EXISTS login_attempts (
@@ -62,9 +65,30 @@ def init_db():
             success      INTEGER NOT NULL DEFAULT 0,
             attempted_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
         );
-
         CREATE INDEX IF NOT EXISTS idx_login_attempts_lookup
             ON login_attempts (email, ip_address, attempted_at);
+
+        CREATE TABLE IF NOT EXISTS password_resets (
+            id           INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id      INTEGER NOT NULL,
+            token_hash   TEXT NOT NULL UNIQUE,
+            created_at   TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            expires_at   TEXT NOT NULL,
+            used_at      TEXT,
+            requested_ip TEXT,
+            FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+        );
+        CREATE INDEX IF NOT EXISTS idx_password_resets_user
+            ON password_resets (user_id);
+
+        CREATE TABLE IF NOT EXISTS password_reset_requests (
+            id           INTEGER PRIMARY KEY AUTOINCREMENT,
+            email        TEXT NOT NULL,
+            ip_address   TEXT NOT NULL,
+            requested_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+        );
+        CREATE INDEX IF NOT EXISTS idx_reset_requests_lookup
+            ON password_reset_requests (email, ip_address, requested_at);
 
         CREATE TABLE IF NOT EXISTS categories (
             id INTEGER PRIMARY KEY AUTOINCREMENT,

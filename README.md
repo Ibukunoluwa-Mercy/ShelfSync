@@ -185,6 +185,21 @@ For questions, suggestions or contributions:
 
 This project is currently available for development and educational purposes.
 
+## 📧 Password Reset Emails
+
+ShelfSync supports sending password reset links via SMTP. When `SMTP_HOST` is omitted or empty, ShelfSync operates in **development mode** and prints the reset email (including the secret reset link) directly inside a bordered box in your running terminal.
+
+To configure real email delivery (e.g. via Gmail, Outlook, or Amazon SES), copy `.env.example` to `.env` or set environment variables in your PowerShell terminal:
+
+```powershell
+$env:APP_BASE_URL="http://127.0.0.1:5000"
+$env:SMTP_HOST="smtp.gmail.com"
+$env:SMTP_PORT="587"
+$env:SMTP_USERNAME="your-email@gmail.com"
+$env:SMTP_PASSWORD="your-app-password"
+$env:SMTP_FROM="ShelfSync <no-reply@shelfsync.local>"
+```
+
 ---
 
 **ShelfSync – Smarter Inventory. Stronger Business.**

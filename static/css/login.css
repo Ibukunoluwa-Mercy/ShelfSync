@@ -65,7 +65,7 @@ body.page-login > main, .page-login .login-page {
 
 /* ===== Actions & Links ===== */
 .page-login .forgot-password-wrap { margin: -2px 0 14px; text-align: right; }
-.page-login .forgot-password-link { color: var(--green); font-size: 0.82rem; font-weight: 800; text-decoration: underline; text-underline-offset: 2px; transition: color 0.15s ease; }
+.page-login .forgot-password-link { color: var(--green); font-size: 0.82rem; font-weight: 800; text-decoration: none; text-underline-offset: 2px; transition: color 0.15s ease; }
 .page-login .forgot-password-link:hover { color: var(--green-dark); }
 .page-login .login-submit {
   align-items: center; background-color: var(--green); border: 0; border-radius: 999px; color: var(--white);

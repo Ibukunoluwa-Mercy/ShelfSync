@@ -26,16 +26,17 @@ def is_safe_url(target):
 
 
 def login_required(view):
-    """Require an authenticated user and verify user still exists in the database."""
+    """Require an authenticated user and verify user and session version still match."""
     @wraps(view)
     def wrapped_view(*args, **kwargs):
         user_id = session.get("user_id")
+        session_version = session.get("session_version", 0)
         if not user_id:
             flash("Please sign in to continue.", "warning")
             return redirect(url_for("login", next=request.full_path.rstrip("?")))
         db = get_db()
-        user = db.execute("SELECT id FROM users WHERE id = ?", (user_id,)).fetchone()
-        if not user:
+        user = db.execute("SELECT id, session_version FROM users WHERE id = ?", (user_id,)).fetchone()
+        if not user or user["session_version"] != session_version:
             session.clear()
             flash("Please sign in to continue.", "warning")
             return redirect(url_for("login"))
@@ -98,7 +99,7 @@ def handle_login(logger):
             return render_template("login.html", form_values=form_values, errors={}, next_url=next_url), 429
 
         user = db.execute(
-            "SELECT id, full_name, email, password_hash, role FROM users WHERE email = ? COLLATE NOCASE",
+            "SELECT id, full_name, email, password_hash, role, session_version FROM users WHERE email = ? COLLATE NOCASE",
             (email,),
         ).fetchone()
 
@@ -138,6 +139,7 @@ def handle_login(logger):
         session["user_id"] = user["id"]
         session["full_name"] = user["full_name"]
         session["role"] = user["role"]
+        session["session_version"] = user["session_version"] or 0
         session["csrf_token"] = secrets.token_hex(32)
         session.permanent = True
 
@@ -146,4 +148,3 @@ def handle_login(logger):
         return redirect(next_url if next_url else url_for("dashboard"))
 
     return render_template("login.html", form_values=form_values, errors=errors, next_url=next_url)
-
