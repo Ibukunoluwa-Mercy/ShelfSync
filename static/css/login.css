@@ -1,16 +1,32 @@
 /* ===== Page Scope ===== */
-.page-login { background-color: var(--offwhite); color: var(--text); min-height: 100vh; }
-.page-login .login-page { align-items: center; display: flex; justify-content: center; min-height: 100vh; padding: 24px 16px; }
+body.page-login {
+  background-color: var(--offwhite);
+  color: var(--text);
+  margin: 0;
+  min-height: 100vh;
+}
+body.page-login > main,
+.page-login .login-page {
+  align-items: center;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 24px 16px;
+  width: 100%;
+}
 
 /* ===== Card Container ===== */
 .page-login .login-card {
   background-color: var(--white);
-  border: 1px solid var(--border);
+  border: 1px solid rgba(229, 224, 200, 0.7);
   border-radius: 24px;
-  box-shadow: 0 12px 36px rgba(31, 77, 57, 0.12);
+  box-shadow: 0 10px 32px rgba(31, 77, 57, 0.08);
+  box-sizing: border-box;
   display: grid;
   grid-template-columns: 1fr;
-  max-width: 960px;
+  margin: 0 auto;
+  max-width: 680px;
   overflow: hidden;
   position: relative;
   width: 100%;
@@ -18,58 +34,134 @@
 
 /* ===== Photo Panel (Left) ===== */
 .page-login .login-image {
-  background: var(--green-tint);
-  height: 200px;
+  background: var(--white);
+  height: 180px;
   overflow: hidden;
   position: relative;
   width: 100%;
 }
-.page-login .login-image img { display: block; height: 100%; object-fit: cover; object-position: center; width: 100%; }
+.page-login .login-image img {
+  display: block;
+  height: 100%;
+  object-fit: cover;
+  object-position: center bottom;
+  width: 100%;
+}
 
 /* ===== Form Panel (Right) ===== */
-.page-login .login-panel { background-color: var(--white); padding: 36px 28px; position: relative; text-align: center; z-index: 2; }
-.page-login .login-logo { display: inline-block; margin-bottom: 0.75rem; }
-.page-login .login-logo img { height: 52px; max-width: 200px; object-fit: contain; }
-.page-login h1 { color: var(--green); font-size: 1.85rem; font-weight: 800; letter-spacing: -0.02em; margin: 0 0 0.35rem; }
-.page-login .login-intro { color: var(--text); font-size: 0.95rem; font-weight: 500; margin-bottom: 1.5rem; }
+.page-login .login-panel {
+  background-color: var(--white);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 28px 24px;
+  position: relative;
+  text-align: center;
+  z-index: 2;
+}
+.page-login .login-logo {
+  display: inline-block;
+  margin: 0 auto 0.5rem;
+}
+.page-login .login-logo img {
+  height: 44px;
+  max-width: 160px;
+  object-fit: contain;
+}
+.page-login h1 {
+  color: var(--green);
+  font-size: 1.65rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.25rem;
+}
+.page-login .login-intro {
+  color: #102a3a;
+  font-size: 0.88rem;
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+}
 
 /* ===== Inputs & Input Groups ===== */
-.page-login .login-field { margin-bottom: 16px; text-align: left; }
+.page-login .login-field {
+  margin-bottom: 13px;
+  text-align: left;
+}
 .page-login .input-group {
-  border: 1px solid #d4dad6;
+  border: 1.5px solid #d8e0dc;
   border-radius: 999px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-  min-height: 52px;
+  box-shadow: none;
+  min-height: 44px;
   overflow: hidden;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
-.page-login .input-group:focus-within { border-color: var(--green); box-shadow: 0 0 0 0.22rem rgba(45, 106, 79, 0.2); }
+.page-login .input-group:focus-within {
+  border-color: var(--green);
+  box-shadow: 0 0 0 0.18rem rgba(45, 106, 79, 0.14);
+}
 .page-login .input-group-text {
   background-color: var(--white);
   border: 0;
-  color: #3b5045;
-  font-size: 1.1rem;
-  padding-left: 1.25rem;
-  padding-right: 0.5rem;
+  color: #264639;
+  font-size: 1.05rem;
+  padding-left: 1.15rem;
+  padding-right: 0.45rem;
 }
-.page-login .form-control { background-color: var(--white); border: 0; color: var(--text); font-size: 0.95rem; height: auto; padding: 0.75rem 0.5rem; }
-.page-login .form-control:focus { border: 0; box-shadow: none; }
-.page-login .form-control::placeholder { color: #8c9892; font-weight: 400; }
+.page-login .form-control {
+  background-color: var(--white);
+  border: 0;
+  color: #1f2937;
+  font-size: 0.88rem;
+  font-weight: 500;
+  height: auto;
+  padding: 0.55rem 0.5rem;
+}
+.page-login .form-control:focus {
+  border: 0;
+  box-shadow: none;
+}
+.page-login .form-control::placeholder {
+  color: #73837b;
+  font-weight: 500;
+  opacity: 1;
+}
 .page-login .password-toggle {
   background: transparent;
   border: 0;
   color: #6b7280;
   cursor: pointer;
-  padding: 0 1.25rem 0 0.5rem;
+  padding: 0 1.1rem 0 0.4rem;
   transition: color 0.15s ease;
 }
 .page-login .password-toggle:hover { color: var(--green); }
-.page-login .invalid-feedback { color: var(--danger); font-size: 0.8rem; margin-top: 4px; padding-left: 1rem; }
-.page-login .caps-lock-warning { color: #925827; font-size: 0.8rem; font-weight: 600; margin-top: 4px; padding-left: 1rem; }
+.page-login .invalid-feedback {
+  color: var(--danger);
+  font-size: 0.75rem;
+  margin-top: 3px;
+  padding-left: 0.85rem;
+}
+.page-login .caps-lock-warning {
+  color: #925827;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-top: 3px;
+  padding-left: 0.85rem;
+}
 
 /* ===== Actions & Links ===== */
-.page-login .forgot-password-wrap { margin: -4px 0 18px; text-align: right; }
-.page-login .forgot-password-link { color: var(--green); font-size: 0.88rem; font-weight: 700; text-decoration: underline; transition: color 0.15s ease; }
+.page-login .forgot-password-wrap {
+  margin: -2px 0 14px;
+  text-align: right;
+}
+.page-login .forgot-password-link {
+  color: var(--green);
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.15s ease;
+}
 .page-login .forgot-password-link:hover { color: var(--green-dark); }
 .page-login .login-submit {
   align-items: center;
@@ -79,35 +171,58 @@
   color: var(--white);
   cursor: pointer;
   display: flex;
-  font-size: 1.05rem;
+  font-size: 0.98rem;
   font-weight: 700;
   justify-content: center;
-  min-height: 52px;
-  padding: 0.75rem 1.5rem;
-  transition: background-color 0.2s ease, transform 0.15s ease;
+  min-height: 44px;
+  padding: 0.6rem 1.25rem;
+  transition: background-color 0.2s ease;
   width: 100%;
 }
 .page-login .login-submit:hover:not(:disabled) { background-color: var(--green-dark); }
 .page-login .login-submit:disabled { cursor: not-allowed; opacity: 0.85; }
-.page-login .signup-prompt { color: #4b5563; font-size: 0.92rem; margin: 1.5rem 0 0; }
-.page-login .signup-prompt a { color: var(--green); font-weight: 700; text-decoration: none; }
+.page-login .signup-prompt {
+  color: #1f2937;
+  font-size: 0.86rem;
+  font-weight: 600;
+  margin: 1.5rem 0 0;
+}
+.page-login .signup-prompt a {
+  color: var(--green);
+  font-weight: 800;
+  text-decoration: none;
+}
 .page-login .signup-prompt a:hover { color: var(--green-dark); text-decoration: underline; }
 
-/* ===== Desktop Split Layout with Curved Edge ===== */
+/* ===== Desktop Split Layout (Compact, S-Wave, Centered) ===== */
 @media (min-width: 768px) {
-  .page-login .login-card { grid-template-columns: 42% 58%; min-height: 560px; }
-  .page-login .login-image { height: 100%; }
+  .page-login .login-card {
+    grid-template-columns: 44% 56%;
+    min-height: 480px;
+  }
+  .page-login .login-image {
+    height: 100%;
+  }
+  .page-login .login-image img {
+    height: 100%;
+    object-fit: cover;
+    object-position: 18% center;
+    transform: scale(1.08);
+  }
   .page-login .login-panel {
-    border-bottom-left-radius: 40px;
-    border-top-left-radius: 40px;
-    box-shadow: -10px 0 24px rgba(0, 0, 0, 0.05);
-    margin-left: -32px;
-    padding: 48px 56px;
+    clip-path: polygon(
+      0% 0%, 100% 0%, 100% 100%, 0% 100%,
+      0% 88%, 3% 72%, 5% 58%, 3.5% 42%, 0% 28%, 4% 15%, 6% 0%
+    );
+    margin-left: -36px;
+    padding: 34px 34px 34px 46px;
   }
 }
 
 @media (min-width: 992px) {
-  .page-login .login-panel { padding: 56px 68px; }
+  .page-login .login-panel {
+    padding: 38px 40px 38px 52px;
+  }
 }
 
 /* ===== Motion Preference ===== */
